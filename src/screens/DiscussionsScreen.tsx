@@ -14,7 +14,7 @@ import type { Discussion } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
 import { fonts } from '../theme/typography';
 import { AppStackParamList } from '../navigation/AppNavigator';
-import { fmtRelative } from '../lib/format';
+import { fmtRelative, stripRichText } from '../lib/format';
 
 type Nav = NativeStackNavigationProp<AppStackParamList>;
 
@@ -107,7 +107,7 @@ export function DiscussionsScreen() {
                 numberOfLines={2}
                 style={{ marginTop: spacing.xs }}
               >
-                {d.content.replace(/<[^>]+>/g, '')}
+                {stripRichText(d.content)}
               </Text>
               <View style={styles.cardFooter}>
                 <Text variant="small" dim>

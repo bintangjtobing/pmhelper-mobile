@@ -13,7 +13,7 @@ import { fetchDailyReports, fetchWeeklyReports } from '../api/endpoints';
 import type { DailyReport, WeeklyReport } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
 import { AppStackParamList } from '../navigation/AppNavigator';
-import { fmtDate, fmtWeek } from '../lib/format';
+import { fmtDate, fmtWeek, stripRichText } from '../lib/format';
 
 type Nav = NativeStackNavigationProp<AppStackParamList>;
 
@@ -152,7 +152,7 @@ export function ReportsScreen() {
                 )}
                 {!!r.accomplished && (
                   <Text variant="body" style={{ marginTop: spacing.sm }} numberOfLines={3}>
-                    {r.accomplished}
+                    {stripRichText(r.accomplished)}
                   </Text>
                 )}
               </Card>
@@ -184,7 +184,7 @@ export function ReportsScreen() {
               )}
               {!!r.content && (
                 <Text variant="body" style={{ marginTop: spacing.sm }} numberOfLines={3}>
-                  {r.content.replace(/<[^>]+>/g, '')}
+                  {stripRichText(r.content)}
                 </Text>
               )}
             </Card>

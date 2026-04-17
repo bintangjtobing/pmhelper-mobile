@@ -16,7 +16,7 @@ import { colors, spacing } from '../theme/colors';
 import { fonts } from '../theme/typography';
 import { useAuth } from '../auth/AuthContext';
 import { AppStackParamList } from '../navigation/AppNavigator';
-import { fmtRelative } from '../lib/format';
+import { fmtRelative, stripRichText } from '../lib/format';
 
 type Nav = NativeStackNavigationProp<AppStackParamList>;
 
@@ -134,7 +134,7 @@ export function ProjectsScreen() {
                   numberOfLines={2}
                   style={{ marginTop: spacing.xs }}
                 >
-                  {p.description.replace(/<[^>]+>/g, '')}
+                  {stripRichText(p.description)}
                 </Text>
               )}
               <View style={styles.cardFooter}>

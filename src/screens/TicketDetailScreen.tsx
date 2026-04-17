@@ -16,7 +16,7 @@ import type { Ticket, TicketComment, TicketStatus } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
 import { fonts } from '../theme/typography';
 import { AppStackParamList } from '../navigation/AppNavigator';
-import { fmtDate, fmtRelative, priorityColor } from '../lib/format';
+import { fmtDate, fmtRelative, priorityColor, stripRichText } from '../lib/format';
 import { extractError } from '../api/client';
 import { useKanbanRealtime } from '../hooks/useKanbanRealtime';
 import { useAuth } from '../auth/AuthContext';
@@ -170,7 +170,7 @@ export function TicketDetailScreen() {
             — Description
           </Text>
           <Text variant="body" muted>
-            {ticket.content.replace(/<[^>]+>/g, '')}
+            {stripRichText(ticket.content)}
           </Text>
         </View>
       )}
@@ -203,7 +203,7 @@ export function TicketDetailScreen() {
                 </Text>
               </View>
               <Text variant="body" style={{ marginTop: 2 }}>
-                {c.content.replace(/<[^>]+>/g, '')}
+                {stripRichText(c.content)}
               </Text>
             </View>
           </View>

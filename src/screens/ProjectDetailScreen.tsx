@@ -15,7 +15,7 @@ import type { Project, Ticket, TicketStatus } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
 import { fonts } from '../theme/typography';
 import { AppStackParamList } from '../navigation/AppNavigator';
-import { priorityColor } from '../lib/format';
+import { priorityColor, stripRichText } from '../lib/format';
 import { useKanbanRealtime } from '../hooks/useKanbanRealtime';
 import { useAuth } from '../auth/AuthContext';
 
@@ -127,7 +127,7 @@ export function ProjectDetailScreen() {
         </Text>
         {!!project.description && (
           <Text variant="body" muted style={{ marginTop: spacing.sm }}>
-            {project.description.replace(/<[^>]+>/g, '').slice(0, 200)}
+            {stripRichText(project.description).slice(0, 200)}
           </Text>
         )}
 

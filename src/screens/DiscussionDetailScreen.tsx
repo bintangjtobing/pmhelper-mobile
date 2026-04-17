@@ -14,7 +14,7 @@ import { fetchDiscussion, replyToDiscussion } from '../api/endpoints';
 import type { Discussion } from '../types/api';
 import { colors, spacing } from '../theme/colors';
 import { AppStackParamList } from '../navigation/AppNavigator';
-import { fmtRelative } from '../lib/format';
+import { fmtRelative, stripRichText } from '../lib/format';
 import { extractError } from '../api/client';
 
 type Nav = NativeStackNavigationProp<AppStackParamList, 'DiscussionDetail'>;
@@ -99,7 +99,7 @@ export function DiscussionDetailScreen() {
       </View>
 
       <View style={styles.bodyBox}>
-        <Text variant="body">{d.content.replace(/<[^>]+>/g, '')}</Text>
+        <Text variant="body">{stripRichText(d.content)}</Text>
       </View>
 
       <Text variant="label" color={colors.textSecondary} style={{ marginTop: spacing.xxl, marginBottom: spacing.md }}>
@@ -117,7 +117,7 @@ export function DiscussionDetailScreen() {
               </Text>
             </View>
             <Text variant="body" style={{ marginTop: 2 }}>
-              {r.content.replace(/<[^>]+>/g, '')}
+              {stripRichText(r.content)}
             </Text>
           </View>
         </View>
