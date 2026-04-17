@@ -150,3 +150,22 @@ export type LoginResponse = {
   token: string;
   user: User;
 };
+
+export type ActivityItem = {
+  kind:
+    | 'ticket.status_changed'
+    | 'ticket.commented'
+    | 'daily_report.submitted'
+    | 'weekly_report.submitted';
+  id: string;
+  at: string;
+  actor: { id: number; name: string; avatar_url: string | null } | null;
+  summary: string;
+  excerpt?: string;
+  target: {
+    type: 'ticket' | 'daily_report' | 'weekly_report';
+    id: number;
+    code?: string;
+    title: string;
+  } | null;
+};

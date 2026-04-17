@@ -1,5 +1,6 @@
 import { api } from './client';
 import type {
+  ActivityItem,
   DailyReport,
   Discussion,
   DiscussionReply,
@@ -28,6 +29,16 @@ export async function logout(): Promise<void> {
 export async function me(): Promise<User> {
   const { data } = await api.get<{ user: User }>('/auth/me');
   return data.user;
+}
+
+export async function updateProfile(payload: { name?: string; status_message?: string | null }): Promise<User> {
+  const { data } = await api.patch<{ user: User }>('/auth/me', payload);
+  return data.user;
+}
+
+export async function fetchActivities(limit = 25): Promise<ActivityItem[]> {
+  const { data } = await api.get<{ data: ActivityItem[] }>('/activities', { params: { limit } });
+  return data.data;
 }
 
 // --- Lookups ---

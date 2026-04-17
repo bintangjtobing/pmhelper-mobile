@@ -15,6 +15,8 @@ import { DiscussionsScreen } from '../screens/DiscussionsScreen';
 import { DiscussionDetailScreen } from '../screens/DiscussionDetailScreen';
 import { UsersScreen } from '../screens/UsersScreen';
 import { UserDetailScreen } from '../screens/UserDetailScreen';
+import { SettingsScreen } from '../screens/SettingsScreen';
+import { ProfileEditScreen } from '../screens/ProfileEditScreen';
 import { TabBar } from './TabBar';
 
 export type AppStackParamList = {
@@ -28,6 +30,8 @@ export type AppStackParamList = {
   WeeklyReportForm: { id?: number };
   DiscussionDetail: { id: number };
   UserDetail: { userId: number };
+  Settings: undefined;
+  ProfileEdit: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -79,6 +83,16 @@ export function AppNavigator() {
       />
       <Stack.Screen name="DiscussionDetail" component={DiscussionDetailScreen} />
       <Stack.Screen name="UserDetail" component={UserDetailScreen} />
+      <Stack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ animation: 'slide_from_bottom' }}
+      />
+      <Stack.Screen
+        name="ProfileEdit"
+        component={ProfileEditScreen}
+        options={{ animation: 'slide_from_bottom' }}
+      />
     </Stack.Navigator>
   );
 }
