@@ -10,11 +10,12 @@ import { Loading } from '../components/Loading';
 import { Avatar } from '../components/Avatar';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
+import { RichContent } from '../components/RichContent';
 import { fetchDiscussion, replyToDiscussion } from '../api/endpoints';
 import type { Discussion } from '../types/api';
 import { colors, spacing } from '../theme/colors';
 import { AppStackParamList } from '../navigation/AppNavigator';
-import { fmtRelative, stripRichText } from '../lib/format';
+import { fmtRelative } from '../lib/format';
 import { extractError } from '../api/client';
 
 type Nav = NativeStackNavigationProp<AppStackParamList, 'DiscussionDetail'>;
@@ -99,7 +100,7 @@ export function DiscussionDetailScreen() {
       </View>
 
       <View style={styles.bodyBox}>
-        <Text variant="body">{stripRichText(d.content)}</Text>
+        <RichContent body={d.content} />
       </View>
 
       <Text variant="label" color={colors.textSecondary} style={{ marginTop: spacing.xxl, marginBottom: spacing.md }}>
@@ -116,9 +117,9 @@ export function DiscussionDetailScreen() {
                 {fmtRelative(r.created_at)}
               </Text>
             </View>
-            <Text variant="body" style={{ marginTop: 2 }}>
-              {stripRichText(r.content)}
-            </Text>
+            <View style={{ marginTop: 2 }}>
+              <RichContent body={r.content} />
+            </View>
           </View>
         </View>
       ))}

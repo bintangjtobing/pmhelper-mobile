@@ -7,10 +7,11 @@ import { Text } from '../components/Text';
 import { Pill } from '../components/Pill';
 import { Loading } from '../components/Loading';
 import { Avatar } from '../components/Avatar';
+import { RichContent } from '../components/RichContent';
 import { fetchWeeklyReport } from '../api/endpoints';
 import type { WeeklyReport } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
-import { fmtRelative, fmtWeek, stripRichText } from '../lib/format';
+import { fmtRelative, fmtWeek } from '../lib/format';
 import { AppStackParamList } from '../navigation/AppNavigator';
 import { useAuth } from '../auth/AuthContext';
 
@@ -45,7 +46,6 @@ export function WeeklyReportViewScreen() {
   if (!r) return <Screen scroll={false}><Loading /></Screen>;
 
   const canEdit = state.user?.id === r.user?.id;
-  const cleanContent = stripRichText(r.content);
 
   return (
     <Screen onRefresh={onRefresh} refreshing={refreshing}>
@@ -94,11 +94,7 @@ export function WeeklyReportViewScreen() {
       )}
 
       <View style={styles.body}>
-        {cleanContent ? (
-          <Text variant="body">{cleanContent}</Text>
-        ) : (
-          <Text variant="body" dim italic>No content yet.</Text>
-        )}
+        <RichContent body={r.content} placeholder="No content yet." />
       </View>
 
       {r.acknowledged_by && (

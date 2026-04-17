@@ -7,10 +7,11 @@ import { Text } from '../components/Text';
 import { Pill } from '../components/Pill';
 import { Loading } from '../components/Loading';
 import { Avatar } from '../components/Avatar';
+import { RichContent } from '../components/RichContent';
 import { fetchDailyReport } from '../api/endpoints';
 import type { DailyReport } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
-import { fmtDate, fmtRelative, stripRichText } from '../lib/format';
+import { fmtDate, fmtRelative } from '../lib/format';
 import { AppStackParamList } from '../navigation/AppNavigator';
 import { useAuth } from '../auth/AuthContext';
 
@@ -111,17 +112,12 @@ export function DailyReportViewScreen() {
 }
 
 function Section({ label, body }: { label: string; body?: string | null }) {
-  const clean = stripRichText(body);
   return (
     <View style={{ marginTop: spacing.xl }}>
       <Text variant="label" color={colors.textSecondary} style={{ marginBottom: spacing.sm }}>
         — {label}
       </Text>
-      {clean ? (
-        <Text variant="body">{clean}</Text>
-      ) : (
-        <Text variant="body" dim italic>None noted.</Text>
-      )}
+      <RichContent body={body} placeholder="None noted." />
     </View>
   );
 }

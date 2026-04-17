@@ -49,8 +49,12 @@ export function stripRichText(input?: string | null): string {
 
   // HTML block → newline so paragraphs don't collapse into a single run
   s = s.replace(/<br\s*\/?>/gi, '\n');
-  s = s.replace(/<\/(p|div|li|h[1-6]|tr)>/gi, '\n');
-  // Strip remaining HTML tags
+  // Table cells: put a bullet separator BEFORE the next cell so adjacent
+  // cells don't smash together (e.g. "MetricValue" → "Metric · Value")
+  s = s.replace(/<\/(td|th)>\s*<(td|th)[^>]*>/gi, ' · ');
+  // Row / list / paragraph terminators → newline
+  s = s.replace(/<\/(tr|p|div|li|h[1-6])>/gi, '\n');
+  // Strip remaining HTML tags (including the lone <td>, <th>, etc.)
   s = s.replace(/<[^>]+>/g, '');
 
   // Markdown: fenced code, inline code, images, links

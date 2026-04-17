@@ -11,6 +11,7 @@ import { Avatar } from '../components/Avatar';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
 import { Divider } from '../components/Divider';
+import { RichContent } from '../components/RichContent';
 import { createComment, fetchComments, fetchStatuses, fetchTicket, moveTicket } from '../api/endpoints';
 import type { Ticket, TicketComment, TicketStatus } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
@@ -169,9 +170,7 @@ export function TicketDetailScreen() {
           <Text variant="label" color={colors.textSecondary} style={{ marginBottom: spacing.sm }}>
             — Description
           </Text>
-          <Text variant="body" muted>
-            {stripRichText(ticket.content)}
-          </Text>
+          <RichContent body={ticket.content} />
         </View>
       )}
 
@@ -202,9 +201,9 @@ export function TicketDetailScreen() {
                   {fmtRelative(c.created_at)}
                 </Text>
               </View>
-              <Text variant="body" style={{ marginTop: 2 }}>
-                {stripRichText(c.content)}
-              </Text>
+              <View style={{ marginTop: 2 }}>
+                <RichContent body={c.content} />
+              </View>
             </View>
           </View>
         ))}
