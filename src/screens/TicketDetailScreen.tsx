@@ -18,6 +18,8 @@ import { fonts } from '../theme/typography';
 import { AppStackParamList } from '../navigation/AppNavigator';
 import { fmtDate, fmtRelative, priorityColor } from '../lib/format';
 import { extractError } from '../api/client';
+import { useKanbanRealtime } from '../hooks/useKanbanRealtime';
+import { useAuth } from '../auth/AuthContext';
 
 type Nav = NativeStackNavigationProp<AppStackParamList, 'TicketDetail'>;
 type Route = RouteProp<AppStackParamList, 'TicketDetail'>;
@@ -25,6 +27,7 @@ type Route = RouteProp<AppStackParamList, 'TicketDetail'>;
 export function TicketDetailScreen() {
   const nav = useNavigation<Nav>();
   const { ticketId } = useRoute<Route>().params;
+  const { state } = useAuth();
 
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [comments, setComments] = useState<TicketComment[] | null>(null);
@@ -53,6 +56,14 @@ export function TicketDetailScreen() {
   useEffect(() => {
     load();
   }, [load]);
+
+  // If someone else moves *this* ticket while viewing it, refresh silently.
+  useKanbanRealtime(ticket?.project?.id, state.user?.id, async (payload) => {
+    if (payload.ticket_id === ticketId) {
+      const t = await fetchTicket(ticketId);
+      setTicket(t);
+    }
+  });
 
   const onRefresh = async () => {
     setRefreshing(true);

@@ -16,6 +16,8 @@ import { colors, spacing, radius } from '../theme/colors';
 import { fonts } from '../theme/typography';
 import { AppStackParamList } from '../navigation/AppNavigator';
 import { priorityColor } from '../lib/format';
+import { useKanbanRealtime } from '../hooks/useKanbanRealtime';
+import { useAuth } from '../auth/AuthContext';
 
 type Nav = NativeStackNavigationProp<AppStackParamList, 'ProjectDetail'>;
 type Route = RouteProp<AppStackParamList, 'ProjectDetail'>;
@@ -24,12 +26,14 @@ export function ProjectDetailScreen() {
   const nav = useNavigation<Nav>();
   const route = useRoute<Route>();
   const { projectId } = route.params;
+  const { state } = useAuth();
 
   const [project, setProject] = useState<Project | null>(null);
   const [tickets, setTickets] = useState<Ticket[] | null>(null);
   const [statuses, setStatuses] = useState<TicketStatus[] | null>(null);
   const [activeStatusId, setActiveStatusId] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [flash, setFlash] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -50,6 +54,16 @@ export function ProjectDetailScreen() {
   useEffect(() => {
     load();
   }, [load]);
+
+  // Subscribe to kanban realtime — when another user moves a ticket, refresh
+  // the list quietly and show a short flash notice so the user knows why
+  // the board shifted under them.
+  useKanbanRealtime(projectId, state.user?.id, async () => {
+    const t = await fetchProjectTickets(projectId, { perPage: 100, sortBy: 'order' });
+    setTickets(t.data);
+    setFlash('Board updated');
+    setTimeout(() => setFlash(null), 2200);
+  });
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -81,6 +95,14 @@ export function ProjectDetailScreen() {
 
   return (
     <Screen onRefresh={onRefresh} refreshing={refreshing}>
+      {/* Realtime flash — appears briefly when another user moves a ticket */}
+      {flash && (
+        <View style={styles.flash}>
+          <View style={styles.flashDot} />
+          <Text variant="smallMedium">{flash}</Text>
+        </View>
+      )}
+
       {/* Hero */}
       <View style={styles.hero}>
         <View style={styles.backRow}>
@@ -268,4 +290,18 @@ const styles = StyleSheet.create({
   ticketLeft: { flex: 1 },
   ticketMeta: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.sm },
   ticketStatus: { width: 4, borderRadius: 2, alignSelf: 'stretch' },
+  flash: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    alignSelf: 'flex-start',
+    paddingHorizontal: spacing.md,
+    paddingVertical: 8,
+    backgroundColor: colors.accent + '22',
+    borderColor: colors.accent,
+    borderWidth: 1,
+    borderRadius: radius.pill,
+    marginTop: spacing.sm,
+  },
+  flashDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.accent },
 });
