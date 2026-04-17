@@ -1,9 +1,3 @@
-// pusher-js compiles to UMD with __esModule marker — default import doesn't
-// always resolve to the constructor under Metro, so use CommonJS require
-// and pick .default if present.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const PusherModule = require('pusher-js/react-native');
-const Pusher: any = PusherModule.default ?? PusherModule;
 import { API_BASE_URL, getToken } from '../api/client';
 
 /**
@@ -15,9 +9,27 @@ const PUSHER_CLUSTER = 'ap1';
 
 let instance: any = null;
 
+/**
+ * Lazy-load Pusher via CommonJS require inside the function — some bundler
+ * interop combinations serve the UMD namespace object as the import default,
+ * so resolve the constructor manually at call time.
+ */
+function resolvePusherCtor(): any {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const mod = require('pusher-js/react-native');
+  // Webpack UMD, ES-module, or plain CJS — try each until we find something
+  // that looks like a class constructor.
+  const candidates = [mod?.default, mod?.Pusher, mod];
+  for (const c of candidates) {
+    if (typeof c === 'function') return c;
+  }
+  throw new Error('Could not locate Pusher constructor in pusher-js module');
+}
+
 export function getPusher(): any {
   if (instance) return instance;
 
+  const Pusher = resolvePusherCtor();
   instance = new Pusher(PUSHER_KEY, {
     cluster: PUSHER_CLUSTER,
     forceTLS: true,
