@@ -12,6 +12,7 @@ import type { Project } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
 import { AppStackParamList } from '../navigation/AppNavigator';
 import { extractError } from '../api/client';
+import { stripRichText } from '../lib/format';
 
 type Nav = NativeStackNavigationProp<AppStackParamList, 'DailyReportForm'>;
 type Route = RouteProp<AppStackParamList, 'DailyReportForm'>;
@@ -39,9 +40,12 @@ export function DailyReportFormScreen() {
           const r = await fetchDailyReport(id!);
           setProjectId(r.project?.id ?? ps[0]?.id ?? null);
           setReportDate(r.report_date);
-          setAccomplished(r.accomplished ?? '');
-          setPlans(r.plans ?? '');
-          setBlockers(r.blockers ?? '');
+          // Historical entries may contain HTML (TinyMCE output from the
+          // web dashboard) or mixed Markdown — convert to plain text so the
+          // user sees something editable instead of raw tags.
+          setAccomplished(stripRichText(r.accomplished));
+          setPlans(stripRichText(r.plans));
+          setBlockers(stripRichText(r.blockers));
         } finally {
           setLoading(false);
         }

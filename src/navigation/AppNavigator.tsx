@@ -8,7 +8,9 @@ import { TicketDetailScreen } from '../screens/TicketDetailScreen';
 import { TicketCreateScreen } from '../screens/TicketCreateScreen';
 import { ReportsScreen } from '../screens/ReportsScreen';
 import { DailyReportFormScreen } from '../screens/DailyReportFormScreen';
+import { DailyReportViewScreen } from '../screens/DailyReportViewScreen';
 import { WeeklyReportFormScreen } from '../screens/WeeklyReportFormScreen';
+import { WeeklyReportViewScreen } from '../screens/WeeklyReportViewScreen';
 import { DiscussionsScreen } from '../screens/DiscussionsScreen';
 import { DiscussionDetailScreen } from '../screens/DiscussionDetailScreen';
 import { UsersScreen } from '../screens/UsersScreen';
@@ -20,7 +22,9 @@ export type AppStackParamList = {
   ProjectDetail: { projectId: number };
   TicketDetail: { ticketId: number };
   TicketCreate: { projectId: number };
+  DailyReportView: { id: number };
   DailyReportForm: { id?: number };
+  WeeklyReportView: { id: number };
   WeeklyReportForm: { id?: number };
   DiscussionDetail: { id: number };
   UserDetail: { userId: number };
@@ -61,11 +65,13 @@ export function AppNavigator() {
         component={TicketCreateScreen}
         options={{ animation: 'slide_from_bottom' }}
       />
+      <Stack.Screen name="DailyReportView" component={DailyReportViewScreen} />
       <Stack.Screen
         name="DailyReportForm"
         component={DailyReportFormScreen}
         options={{ animation: 'slide_from_bottom' }}
       />
+      <Stack.Screen name="WeeklyReportView" component={WeeklyReportViewScreen} />
       <Stack.Screen
         name="WeeklyReportForm"
         component={WeeklyReportFormScreen}

@@ -12,7 +12,7 @@ import type { Project } from '../types/api';
 import { colors, spacing, radius } from '../theme/colors';
 import { AppStackParamList } from '../navigation/AppNavigator';
 import { extractError } from '../api/client';
-import { fmtWeek } from '../lib/format';
+import { fmtWeek, stripRichText } from '../lib/format';
 
 type Nav = NativeStackNavigationProp<AppStackParamList, 'WeeklyReportForm'>;
 type Route = RouteProp<AppStackParamList, 'WeeklyReportForm'>;
@@ -57,7 +57,9 @@ export function WeeklyReportFormScreen() {
           setProjectId(r.project?.id ?? ps[0]?.id ?? null);
           setWeekStart(r.week_start);
           setWeekEnd(r.week_end);
-          setContent(r.content ?? '');
+          // Strip HTML/Markdown so the editor shows clean plain text instead
+          // of raw tags from the web dashboard's TinyMCE output.
+          setContent(stripRichText(r.content));
         } finally {
           setLoading(false);
         }

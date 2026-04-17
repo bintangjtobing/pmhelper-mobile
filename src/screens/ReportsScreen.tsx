@@ -134,7 +134,7 @@ export function ReportsScreen() {
         ) : (
           <View style={{ gap: spacing.md }}>
             {dailies.map((r) => (
-              <Card key={r.id} onPress={() => nav.navigate('DailyReportForm', { id: r.id })}>
+              <Card key={r.id} onPress={() => nav.navigate('DailyReportView', { id: r.id })}>
                 <View style={styles.cardTop}>
                   <Text variant="label" color={colors.textSecondary}>
                     {fmtDate(r.report_date, 'EEE · MMM d')}
@@ -166,7 +166,7 @@ export function ReportsScreen() {
       ) : (
         <View style={{ gap: spacing.md }}>
           {weeklies.map((r) => (
-            <Card key={r.id} onPress={() => nav.navigate('WeeklyReportForm', { id: r.id })}>
+            <Card key={r.id} onPress={() => nav.navigate('WeeklyReportView', { id: r.id })}>
               <View style={styles.cardTop}>
                 <Text variant="label" color={colors.textSecondary}>
                   {fmtWeek(r.week_start, r.week_end)}
