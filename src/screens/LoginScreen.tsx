@@ -34,7 +34,7 @@ export function LoginScreen() {
       <StatusBar style="light" />
       {/* Warm gradient bloom in the corner — editorial atmosphere */}
       <LinearGradient
-        colors={['rgba(229,87,63,0.12)', 'rgba(229,87,63,0)']}
+        colors={['rgba(43,127,168,0.18)', 'rgba(43,127,168,0)']}
         start={{ x: 1, y: 0 }}
         end={{ x: 0.3, y: 0.5 }}
         style={styles.bloom}

@@ -21,10 +21,10 @@ export const colors = {
   textMuted: '#6b6660',
   textDisabled: '#4a4541',
 
-  // Primary accent — terracotta, editorial warmth
-  accent: '#e5573f',
-  accentPressed: '#c43f28',
-  accentMuted: '#3a2019',
+  // Primary accent — deep sea blue, editorial warmth-vs-cool contrast
+  accent: '#2b7fa8',
+  accentPressed: '#1d6091',
+  accentMuted: '#102734',
 
   // Status colors — muted, warm-aligned (not neon)
   success: '#9aa87a', // sage
@@ -42,7 +42,7 @@ export const colors = {
 
   // Priority chip colors (mapped from API priority names)
   priorityBlocker: '#c62d42',
-  priorityCritical: '#e5573f',
+  priorityCritical: '#d96a4a', // kept warm so priorities stay distinguishable from the blue accent
   priorityHigh: '#e8a93f',
   priorityNormal: '#a8a199',
   priorityLow: '#6b6660',
